@@ -125,4 +125,5 @@ public class GameService : IGameService
     public List<LeaderboardDTO> GetLeaderboard() => _sessionRepo.GetLeaderboard();
     public IEnumerable<FailedGameDTO> GetUnfinishedGames(int playerId) => _sessionRepo.GetFailedGamesByPlayer(playerId, _context);
     public void UpdateConfig(int configId, ConfigUpdateReq req) => _configRepo.UpdateObstacle(configId, req.Row, req.Column, req.Type);
+    public IEnumerable<PersonalHistoryDTO> GetPersonalHistory(int playerId) => _sessionRepo.GetPersonalHistory(playerId);
 }

@@ -33,4 +33,18 @@ public class GameSessionRepository : BaseRepository<GameSession, int>, IGameSess
                     ProposedPositions = ctx.Guesses.Where(g => g.GameSessionId == session.Id).ToList()
                 }).ToList();
     }
+    
+    public IEnumerable<PersonalHistoryDTO> GetPersonalHistory(int playerId)
+    {
+        return _context.GameSessions
+            .Where(s => s.PlayerId == playerId && s.Status != "Active")
+            .OrderByDescending(s => s.StartTime)
+            .Select(s => new PersonalHistoryDTO
+            {
+                Status = s.Status,
+                Score = s.Score,
+                DurationInSeconds = s.DurationInSeconds,
+                StartTime = s.StartTime
+            }).ToList();
+    }
 }

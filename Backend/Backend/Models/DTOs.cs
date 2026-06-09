@@ -27,3 +27,11 @@ public class FailedGameDTO
     public string SafePath { get; set; } = string.Empty;
     public List<Guess> ProposedPositions { get; set; } = new List<Guess>();
 }
+
+public class PersonalHistoryDTO
+{
+    public string Status { get; set; } = string.Empty;
+    public int Score { get; set; }
+    public int DurationInSeconds { get; set; }
+    public DateTime StartTime { get; set; }
+}

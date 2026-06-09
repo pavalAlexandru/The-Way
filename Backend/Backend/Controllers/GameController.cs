@@ -51,4 +51,7 @@ public class GameController : ControllerBase
         _gameService.UpdateConfig(id, req); 
         return Ok(new { message = "Configuration updated successfully" }); 
     }
+    
+    [Authorize] [HttpGet("history")]
+    public ActionResult GetHistory() => Ok(_gameService.GetPersonalHistory(UserId));
 }

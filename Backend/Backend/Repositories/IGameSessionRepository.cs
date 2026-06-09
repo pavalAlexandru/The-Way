@@ -6,4 +6,5 @@ public interface IGameSessionRepository : ICrudRepository<GameSession, int>
 {
     List<LeaderboardDTO> GetLeaderboard();
     IEnumerable<FailedGameDTO> GetFailedGamesByPlayer(int playerId, AppDbContext ctx);
+    IEnumerable<PersonalHistoryDTO> GetPersonalHistory(int playerId);
 }

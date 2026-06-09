@@ -10,4 +10,5 @@ public interface IGameService
     List<LeaderboardDTO> GetLeaderboard();
     IEnumerable<FailedGameDTO> GetUnfinishedGames(int playerId);
     void UpdateConfig(int configId, ConfigUpdateReq req);
+    IEnumerable<PersonalHistoryDTO> GetPersonalHistory(int playerId);
 }
