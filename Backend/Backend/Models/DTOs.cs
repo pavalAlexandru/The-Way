@@ -2,7 +2,7 @@ namespace Backend.Models;
 
 public class AuthReq { public string Username { get; set; } = string.Empty; }
 public class MoveReq { public int SessionId { get; set; } public int Row { get; set; } }
-public class ConfigUpdateReq { public int Row { get; set; } public int Column { get; set; } }
+public class ConfigUpdateReq { public int Row { get; set; } public int Column { get; set; } public string Type { get; set; } = string.Empty; }
 
 public class LeaderboardDTO
 {
