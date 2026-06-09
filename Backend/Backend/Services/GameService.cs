@@ -45,12 +45,48 @@ public class GameService : IGameService
         return tokenHandler.WriteToken(tokenHandler.CreateToken(tokenDescriptor));
     }
 
+    // public GameSession StartGame(int playerId)
+    // {
+    //     _logger.LogInformation("Player ID {PlayerId} started a new game.", playerId);
+    //     
+    //     var conf = _configRepo.GetAll().First();
+    //     return _sessionRepo.Add(new GameSession { PlayerId = playerId, GameConfigId = conf.Id, StartTime = DateTime.Now, CurrentColumn = 1 });
+    // }
+    
     public GameSession StartGame(int playerId)
     {
-        _logger.LogInformation("Player ID {PlayerId} started a new game.", playerId);
+        var rnd = new Random();
+        var safePath = new int[4];
+        for (int i = 0; i < 4; i++) safePath[i] = rnd.Next(1, 5);
         
-        var conf = _configRepo.GetAll().First();
-        return _sessionRepo.Add(new GameSession { PlayerId = playerId, GameConfigId = conf.Id, StartTime = DateTime.Now, CurrentColumn = 1 });
+        var obstacles = new List<string>();
+        while (obstacles.Count < 5)
+        {
+            int r = rnd.Next(1, 5);
+            int c = rnd.Next(1, 5);
+            
+            if (safePath[c - 1] == r) continue; 
+            
+            string obs = $"{r}-{c}";
+            if (!obstacles.Contains(obs)) obstacles.Add(obs);
+        }
+
+        var conf = new GameConfig 
+        { 
+            SafePath = string.Join(",", safePath), 
+            Obstacles = string.Join(",", obstacles) 
+        };
+        _configRepo.Add(conf); // Add to DB
+
+        // 4. Create the session linked to this unique configuration
+        return _sessionRepo.Add(new GameSession 
+        { 
+            PlayerId = playerId, 
+            GameConfigId = conf.Id, 
+            StartTime = DateTime.Now, 
+            CurrentColumn = 1,
+            Status = "Active"
+        });
     }
 
     public GameEndDTO ProcessMove(int sessionId, int row, int playerId)
