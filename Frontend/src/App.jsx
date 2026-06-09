@@ -1,7 +1,7 @@
 import { useState } from "react";
-import Login from "./components/Login";
-import GameBoard from "./components/GameBoard";
-import LeaderBoard from "./components/LeaderBoard";
+import Login from "./Login";
+import GameBoard from "./GameBoard";
+import LeaderBoard from "./LeaderBoard";
 import "./App.css";
 
 function App() {
