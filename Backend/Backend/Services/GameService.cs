@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.Extensions.Logging;
 
 namespace Backend.Services;
 
@@ -13,16 +14,26 @@ public class GameService : IGameService
     private readonly IGameSessionRepository _sessionRepo;
     private readonly IGameConfigRepository _configRepo;
     private readonly IConfiguration _config;
+    private readonly ILogger<GameService> _logger;
 
-    public GameService(AppDbContext context, IGameSessionRepository sessionRepo, IGameConfigRepository configRepo, IConfiguration config)
+    public GameService(AppDbContext context, IGameSessionRepository sessionRepo, IGameConfigRepository configRepo, IConfiguration config, ILogger<GameService> logger)
     {
         _context = context; _sessionRepo = sessionRepo; _configRepo = configRepo; _config = config;
+        _logger = logger;
     }
 
     public string? Authenticate(string username)
     {
+        _logger.LogInformation("Authentication attempt for user: {Username}", username);
+        
         var player = _context.Players.FirstOrDefault(p => p.Username == username);
-        if (player == null) return null; 
+        if (player == null)
+        {
+            _logger.LogWarning("Authentication failed. Player {Username} not found.", username);
+            return null;
+        } 
+        
+        _logger.LogInformation("Player {Username} successfully authenticated.", username);
 
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes(_config["Jwt:Key"] ?? "KeySuperSecret1234567890ForExams!");
@@ -36,6 +47,8 @@ public class GameService : IGameService
 
     public GameSession StartGame(int playerId)
     {
+        _logger.LogInformation("Player ID {PlayerId} started a new game.", playerId);
+        
         var conf = _configRepo.GetAll().First();
         return _sessionRepo.Add(new GameSession { PlayerId = playerId, GameConfigId = conf.Id, StartTime = DateTime.Now, CurrentColumn = 1 });
     }

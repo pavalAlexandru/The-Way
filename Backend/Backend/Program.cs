@@ -21,7 +21,7 @@ builder.Services.AddScoped<IGameSessionRepository, GameSessionRepository>();
 builder.Services.AddScoped<IGameConfigRepository, GameConfigRepository>();
 builder.Services.AddScoped<IGameService, GameService>();
 
-var jwtKey = "KeySuperSecret1234567890ForExams!"; // Matches the fallback in GameService
+var jwtKey = "KeySuperSecret1234567890ForExams!"; 
 builder.Configuration["Jwt:Key"] = jwtKey; 
 var key = Encoding.ASCII.GetBytes(jwtKey);
 
@@ -50,7 +50,7 @@ builder.Services.AddCors(options =>
         policy.WithOrigins("http://localhost:5173")
               .AllowAnyMethod()
               .AllowAnyHeader()
-              .AllowCredentials(); // Required for SignalR WebSockets
+              .AllowCredentials();
     });
 });
 
